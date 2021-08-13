@@ -1,0 +1,6 @@
+body {
+    background-color: #fafafa;
+}
+.ant-pagination-options-size-changer.ant-select {
+    display: none;
+}
