@@ -37,7 +37,7 @@ export default function Login() {
   };
   return (
     <>
-    <Alert type="error" showIcon closable message="dsfsv f f ef"/>
+      <Alert type="error" showIcon closable message="dsfsv f f ef"/>
       <Spinner spinning />
       <Row justify="center" align="middle" style={{minHeight:'100vh'}}>
         
