@@ -1,18 +1,7 @@
 import Signup from './Signup';
-import ReactDOM from 'react-dom';
-import { BrowserRouter as Router} from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { store } from '../../redux-toolkit/store'
+import { matchMedia, render } from '../../testUtils';
 
-window.matchMedia = window.matchMedia || function() {
-    return {
-        matches: false,
-        addListener: function() {},
-        removeListener: function() {}
-    };
-};
+matchMedia("");
 it("renders Signup page correctly", ()=> {
-    const div = document.createElement("div")
-    ReactDOM.render(<Provider store={store}><Router><Signup /></Router></Provider>, div)
+    render(<Signup />)
 })
-export {}

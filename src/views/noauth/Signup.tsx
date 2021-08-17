@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Input, Button, Select, Row, Col, Typography } from "antd";
+import { Form, Input, Button, Select, Row, Col, Typography, message } from "antd";
 import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
@@ -27,9 +27,9 @@ export default function Signup() {
       </Select>
     </Form.Item>
   );
-  const handleSubmit = () => {};
 
   const onFinish = (values: any) => {
+    message.success("User enrolled successfully!")
     dispatch(userData(values));
     localStorage.setItem("users",JSON.stringify(values))
     console.log(values);
@@ -190,7 +190,7 @@ export default function Signup() {
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 8, span: 8 }}>
-            <Button type="primary" onClick={handleSubmit} htmlType="submit">
+            <Button type="primary" htmlType="submit">
               Submit
             </Button>
           </Form.Item>

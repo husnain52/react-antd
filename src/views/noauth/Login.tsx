@@ -1,4 +1,4 @@
-import { Form, Button, Input, Checkbox, Row, Col, Typography, Alert } from "antd";
+import { Form, Button, Input, Checkbox, Row, Col, Typography, message } from "antd";
 import styled from "styled-components";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { Link, useHistory } from 'react-router-dom';
@@ -31,17 +31,12 @@ export default function Login() {
     } 
     else {
       //If credentials entered is invalid
-      window.alert("Invalid Username/Password");
+      message.error("Invalid Username/Password")
       return;
     }
   };
   return (
     <>
-      <Alert type="error" showIcon closable message="dsfsv f f ef"/>
-      <Alert type="error" showIcon closable message="dsfsv f f ef"/>
-      <Alert type="error" showIcon closable message="dsfsv f f ef"/>
-      <Alert type="error" showIcon closable message="dsfsv f f ef"/>
-      <Alert type="error" showIcon closable message="dsfsv f f ef"/>
       <Spinner spinning />
       <Row justify="center" align="middle" style={{minHeight:'100vh'}}>
         

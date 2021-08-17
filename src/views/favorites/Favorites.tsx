@@ -10,8 +10,7 @@ import {
   Divider,
   Input,
 } from "antd";
-
-
+import Modal from "antd/lib/modal/Modal";
 
 
 export default function Favorites() {
@@ -19,6 +18,7 @@ export default function Favorites() {
   const favArray:any = JSON.parse(getFavorites);
   const [data, setdata] = React.useState<any>([]);
   const [loading, setloading] = React.useState<boolean>(false);
+  const [visible, setvisible] = React.useState<boolean>(false);
   React.useEffect(() => {
     if (favArray) {
       setdata(favArray);
@@ -75,21 +75,34 @@ export default function Favorites() {
       key: "action",
       render: (record: any) => (
         <Space size="small" split={<Divider type="vertical" />}>
-          <Button onClick={() => handleDelete(record)}>Delete</Button>
+          <Button type="default" onClick={()=>setvisible(true)}>
+          Delete
+        </Button>
+        <Modal
+          title="Modal"
+          visible={visible}
+          onOk={()=>handleDelete(record)}
+          onCancel={()=>setvisible(false)}
+          okText="OK"
+          cancelText="Cancel"
+        >
+          <p>Are you sure to delete?</p>
+        </Modal>
         </Space>
       ),
     },
   ];
   const handleDelete = (record: any) => {
+    console.log(record)
     setloading(true)
     const getFavorites:any = localStorage.getItem("favorites");
     var favArray:[] = JSON.parse(getFavorites);
     const idx = favArray.findIndex((x: any) => x.key === record.key);
     if (idx > -1) {
       favArray.splice(idx, 1)
-      console.log(favArray)
       localStorage.setItem("favorites", JSON.stringify(favArray));
     }
+    setvisible(false)
   };
   return (
     <>

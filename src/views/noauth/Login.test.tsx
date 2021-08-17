@@ -1,16 +1,16 @@
-import Login from './Login';
-import ReactDOM from 'react-dom';
-import { BrowserRouter as Router} from 'react-router-dom';
+import Login from "./Login";
+import { render, matchMedia } from "../../testUtils";
+import useDocumentTitle from "../../common/documentTitle";
+import {renderHook} from '@testing-library/react-hooks'
 
-window.matchMedia = window.matchMedia || function() {
-    return {
-        matches: false,
-        addListener: function() {},
-        removeListener: function() {}
-    };
-};
-it("renders login page correctly", ()=> {
-    const div = document.createElement("div")
-    ReactDOM.render(<Router><Login /></Router>, div)
-})
-export {}
+matchMedia("");
+
+describe("Login page", () => {
+  it("renders login page correctly", () => {
+    render(<Login />);
+  });
+  it("renders the page title correctly", () => {
+      renderHook(()=>useDocumentTitle('Login Page'))
+      expect(document.title).toBe('Login Page')
+  })
+});
