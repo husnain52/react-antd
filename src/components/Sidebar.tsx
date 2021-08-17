@@ -12,6 +12,7 @@ import {
 import "../styles/sidebar.css";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import UserDetails from "./UserDetails";
 
 const { Header, Sider, Content } = Layout;
 
@@ -59,7 +60,8 @@ export default function Sidebar(props:any) {
               onClick: toggle,
             }
           )}
-          <Link to="/login"><StyledButton icon={<LogoutOutlined />} onClick={handleLogout}>Logout</StyledButton></Link>
+          {/* <Link to="/login"><StyledButton icon={<LogoutOutlined />} onClick={handleLogout}>Logout</StyledButton></Link> */}
+            <UserDetails />
         </Header>
         <Content
           className="site-layout-background"

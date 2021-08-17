@@ -13,4 +13,7 @@ describe("Login page", () => {
       renderHook(()=>useDocumentTitle('Login Page'))
       expect(document.title).toBe('Login Page')
   })
+  it("redners login form correctly", ()=>{
+      
+  })
 });
