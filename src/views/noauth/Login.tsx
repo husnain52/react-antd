@@ -43,7 +43,7 @@ export default function Login() {
         <Col span={6}>
           <Form
             name="normal_login"
-            data-testId="form-login"
+            data-testid="form-login"
             className="login-form"
             initialValues={{ remember: true }}
             onFinish={handleSubmit}

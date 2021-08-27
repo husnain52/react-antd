@@ -4,3 +4,6 @@ body {
 .ant-pagination-options-size-changer.ant-select {
     display: none;
 }
+.ant-drawer-body {
+    overflow: hidden;
+}

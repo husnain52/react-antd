@@ -3,7 +3,7 @@ import counterReducer from '../views/home/slice';
 import userData from '../views/noauth/slice';
 import createSagaMiddleware from 'redux-saga';
 import rootSaga from '../views/users/saga';
-import data from '../views/users/slice';
+import data from '../views/users/slice';  
 
 // create the saga middleware
 let sagaMiddleware = createSagaMiddleware();

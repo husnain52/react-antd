@@ -12,13 +12,14 @@ import {
   Popconfirm,
 } from "antd";
 import Modal from "antd/lib/modal/Modal";
+import useDocumentTitle from "common/documentTitle";
 
 export default function Favorites() {
+  useDocumentTitle('Favorite Users')
   const getFavorites: any = localStorage.getItem("favorites");
   const favArray: any = JSON.parse(getFavorites);
   const [data, setdata] = React.useState<any>([]);
   const [loading, setloading] = React.useState<boolean>(false);
-  const [visible, setvisible] = React.useState<boolean>(false);
   React.useEffect(() => {
     if (favArray) {
       setdata(favArray);
@@ -78,11 +79,10 @@ export default function Favorites() {
           <Popconfirm
             title="Are you sure to delete this user?"
             onConfirm={() => handleDelete(record)}
-            onCancel={() => setvisible(false)}
             okText="Yes"
             cancelText="No"
           >
-            <Button type="default" onClick={() => setvisible(true)}>
+            <Button type="default">
               Delete
             </Button>
           </Popconfirm>
@@ -91,7 +91,6 @@ export default function Favorites() {
     },
   ];
   const handleDelete = (record: any) => {
-    console.log(record);
     setloading(true);
     const getFavorites: any = localStorage.getItem("favorites");
     var favArray: [] = JSON.parse(getFavorites);
@@ -100,7 +99,6 @@ export default function Favorites() {
       favArray.splice(idx, 1);
       localStorage.setItem("favorites", JSON.stringify(favArray));
     }
-    setvisible(false);
   };
   return (
     <>

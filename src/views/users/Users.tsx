@@ -115,7 +115,6 @@ export default function About() {
           Get Some Data
         </StyledButton>
       </StyledDiv>
-
       <Table
         dataSource={data}
         columns={columns}

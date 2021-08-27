@@ -3,6 +3,7 @@ import {Menu, Avatar, Dropdown, Button, Typography, Descriptions, Space, Divider
 import { LogoutOutlined,EditOutlined, UserOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
+import EditDetails from "./EditDetails";
 
 const StyledAvatar = styled(Avatar)`
     float: right;
@@ -33,23 +34,24 @@ export default function UserDetails() {
         localStorage.removeItem("isAuthenticated");
         history.push('/login')
     }
+  const userImageUrl = localStorage.getItem('userImageUrl');
     const menu = (
         <Flexbox>
-           <Avatar size={64} icon={<UserOutlined />} />
+           <Avatar size={64} src={userImageUrl ? userImageUrl : <UserOutlined />} />
            <StyledDiv>
             <Typography.Title level={5}>{data && data.name}</Typography.Title>
            <Typography>{data && data.email}</Typography>
            <Typography>{data && `${data.prefix} ${data["phone number"]}`}</Typography>
            </StyledDiv>
            <Space direction="horizontal" split={<Divider type="vertical" />}>
-                <Tooltip title="Edit"><Button shape="circle" icon={<EditOutlined />} /></Tooltip>
+                <EditDetails />
                 <Tooltip title="Logout"><Button onClick={handleLogout} shape="circle" icon={<LogoutOutlined />} /></Tooltip>
            </Space>
         </Flexbox>
       );
   return (
       <Dropdown overlay={menu} trigger={['click']}>
-          <Tooltip title={data && data.name}><StyledAvatar size="large" icon={<UserOutlined />} /></Tooltip>
+          <Tooltip title={data && data.name}><StyledAvatar size="large" src={userImageUrl ? userImageUrl : <UserOutlined />} /></Tooltip>
       </Dropdown>
   );
 }

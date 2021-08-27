@@ -1,23 +1,79 @@
 import React from "react";
-import { Form, Input, Button, Select, Row, Col, Typography, message } from "antd";
-import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
+import {
+  Tooltip,
+  Button,
+  Input,
+  Select,
+  Upload,
+  Form,
+  Drawer,
+  message,
+  Modal
+} from "antd";
+import {
+  EditOutlined,
+  LockOutlined,
+  MailOutlined,
+  UserOutlined,
+  PlusOutlined
+} from "@ant-design/icons";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router";
-import { userData } from "./slice";
-import useDocumentTitle from "../../common/documentTitle";
-import Spinner from "../../components/Spinner";
-
+import { userData } from "views/noauth/slice";
 const { Option } = Select;
 
-export default function Signup() {
-  useDocumentTitle("Signup for an Account");
+
+function getBase64(file:any) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+}
+
+
+export default function EditDetails() {
   const dispatch = useDispatch();
-  const history = useHistory();
+  const data:any = JSON.parse(localStorage.getItem('users') || '{}');
+  const [visible, setvisible] = React.useState<boolean>(false);
   const [form] = Form.useForm();
+  const [state, setstate] = React.useState<any>({
+      fileList: [],
+      previewImage: '',
+      previewVisible: false,
+      previewTitle: "",
+      url: ''
+  });
+  const handlePreview = async (file:any) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setstate({
+      previewImage: file.url || file.preview,
+      previewVisible: true,
+      previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
+    });
+  };
+   const handleChange = async ({ fileList }:any) => {
+     if(fileList.length >=1){
+       const url = await getBase64(fileList[0].originFileObj);
+       setstate({...state,url:url,
+      fileList:fileList
+    })
+    }
+    };
+   const handleCancel = () => setstate({...state, previewVisible: false });
+
+   const uploadButton = (
+    <div>
+      <PlusOutlined />
+      <div style={{ marginTop: 8 }}>Add Profile Image</div>
+    </div>
+  );
+
   const prefixSelector = (
-    <Form.Item name="prefix" noStyle>
+    <Form.Item initialValue={data && data.prefix} name="prefix" noStyle>
       <Select
-        defaultValue="+92"
         style={{
           width: 70,
         }}
@@ -27,21 +83,33 @@ export default function Signup() {
       </Select>
     </Form.Item>
   );
-
   const onFinish = (values: any) => {
-    message.success("User enrolled successfully!")
     dispatch(userData(values));
-    localStorage.setItem("users",JSON.stringify(values))
-    history.push("/login");
+    if(state.url){
+      console.log(state.url)
+      localStorage.setItem('userImageUrl',state.url)
+    }
+    localStorage.setItem("users", JSON.stringify(values));
+    setvisible(false);
+    message.success("Changes saved successfully!");
   };
   const namePattern = /^\s*([A-Za-z]{1,}([\.,] |[-']| ))+[A-Za-z]+\.?\s*$/;
-  const phoneRegEx =
-    /^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/;
+  const phoneRegEx = /^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/;
   return (
     <>
-    <Spinner spinning />
-    <Row justify="center" align="middle" style={{ minHeight: "100vh" }}>
-      <Col span={6}>
+      <Tooltip title="Edit">
+        <Button
+          shape="circle"
+          onClick={() => setvisible(true)}
+          icon={<EditOutlined />}
+        />
+      </Tooltip>
+      <Drawer
+        title="Edit your account"
+        width={520}
+        onClose={() => setvisible(false)}
+        visible={visible}
+      >
         <Form
           form={form}
           name="register"
@@ -51,11 +119,28 @@ export default function Signup() {
           }}
           scrollToFirstError
         >
-          <Form.Item>
-            <Typography.Title>Signup</Typography.Title>
+          <Form.Item wrapperCol={{offset:9}} >
+            <Upload
+              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+              listType="picture-card"
+              fileList={state.fileList}
+              onPreview={handlePreview}
+              onChange={handleChange}
+            >
+              {state.fileList.length >= 1 ? null : uploadButton}
+            </Upload>
+            <Modal
+              visible={state.previewVisible}
+              title={state.previewTitle}
+              footer={null}
+              onCancel={handleCancel}
+            >
+              <img alt="example" style={{ width: "100%" }} src={state.previewImage} />
+            </Modal>
           </Form.Item>
           <Form.Item
             name="name"
+            initialValue={data && data.name}
             rules={[
               {
                 required: true,
@@ -79,6 +164,7 @@ export default function Signup() {
           </Form.Item>
           <Form.Item
             name="email"
+            initialValue={data && data.email}
             rules={[
               {
                 type: "email",
@@ -95,9 +181,9 @@ export default function Signup() {
               prefix={<MailOutlined className="site-form-item-icon" />}
             />
           </Form.Item>
-
           <Form.Item
             name="password"
+            initialValue={data && data.password} 
             rules={[
               {
                 required: true,
@@ -118,35 +204,9 @@ export default function Signup() {
           >
             <Input.Password prefix={<LockOutlined />} placeholder="Password" />
           </Form.Item>
-
-          <Form.Item
-            name="confirm Password"
-            dependencies={["password"]}
-            hasFeedback
-            rules={[
-              {
-                required: true,
-                message: "Please confirm your password!",
-              },
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  if (!value || getFieldValue("password") === value) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject(
-                    new Error("Passwords that you entered do not match!")
-                  );
-                },
-              }),
-            ]}
-          >
-            <Input.Password
-              prefix={<LockOutlined />}
-              placeholder="Confirm Password"
-            />
-          </Form.Item>
           <Form.Item
             name="phone number"
+            initialValue={data && data["phone number"]}
             rules={[
               {
                 required: true,
@@ -174,6 +234,7 @@ export default function Signup() {
           </Form.Item>
           <Form.Item
             name="gender"
+            initialValue={data && data.gender}
             rules={[
               {
                 required: true,
@@ -187,14 +248,11 @@ export default function Signup() {
               <Option value="other">Other</Option>
             </Select>
           </Form.Item>
-          <Form.Item wrapperCol={{ offset: 8, span: 8 }}>
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
+          <Form.Item>
+              <Button type="primary"htmlType="submit">Save Changes</Button>
           </Form.Item>
         </Form>
-      </Col>
-    </Row>
-  </>
+      </Drawer>
+    </>
   );
 }

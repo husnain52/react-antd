@@ -8,6 +8,7 @@ import useDocumentTitle from '../../common/documentTitle';
 
 interface IStateProps {
   number: number;
+  array: any[]
 }
 const StyledTitle = styled(Typography)`
   color: red;
@@ -28,6 +29,7 @@ export default function Home() {
   const dispatch = useDispatch();
   const [state, setstate] = React.useState<IStateProps>({
     number: 0,
+    array : [{name:"Add"}]
   });
 
   const count = useSelector((state: RootState) => state.counter.value);
@@ -44,6 +46,15 @@ export default function Home() {
   const handleSetValue = () => {
     dispatch(incrementByAmount(state.number));
   };
+
+
+const handleAdd = () => {
+  let newArr = state.array;
+  let obj:any = {name:"dsbdsj"}
+  const finalArr = [obj].concat(newArr)
+  setstate({...state,array:finalArr})
+}
+
 
   return (
     <>
@@ -84,6 +95,14 @@ export default function Home() {
         <StyledButton onClick={handleDecrement}>Decrement</StyledButton>
         <Input onChange={handleChange} type="number" />
         <StyledButton onClick={handleSetValue}>Set Value</StyledButton>
+        {state.array.map(function(cell:any, i:number) {
+          if(i===0){
+            return <Button key={i} onClick={handleAdd}>{cell.name}</Button>    
+          }
+          else if(i > 0) {
+            return <><Button key={i} onClick={handleAdd}>{cell.name}</Button><Button>second</Button></>
+          }
+        })}
       </Space>
     </>
   );
