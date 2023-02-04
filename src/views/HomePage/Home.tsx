@@ -1,14 +1,21 @@
 import React from "react";
-import { Button, Space, Typography, Input, PageHeader, Descriptions } from "antd";
+import {
+  Button,
+  Space,
+  Typography,
+  Input,
+  PageHeader,
+  Descriptions,
+} from "antd";
 import styled from "styled-components";
 import { RootState } from "../../redux-toolkit/store";
 import { useSelector, useDispatch } from "react-redux";
 import { decrement, increment, incrementByAmount } from "./slice";
-import useDocumentTitle from '../../common/documentTitle';
+import useDocumentTitle from "../../common/documentTitle";
 
 interface IStateProps {
   number: number;
-  array: any[]
+  array: any[];
 }
 const StyledTitle = styled(Typography)`
   color: red;
@@ -25,11 +32,11 @@ const StyledButton = styled(Button)`
 `;
 
 export default function Home() {
-  useDocumentTitle('Home Page 👻')
+  useDocumentTitle("Home Page 👻");
   const dispatch = useDispatch();
   const [state, setstate] = React.useState<IStateProps>({
     number: 0,
-    array : [{name:"Add"}]
+    array: [{ name: "Add" }],
   });
 
   const count = useSelector((state: RootState) => state.counter.value);
@@ -47,14 +54,12 @@ export default function Home() {
     dispatch(incrementByAmount(state.number));
   };
 
-
-const handleAdd = () => {
-  let newArr = state.array;
-  let obj:any = {name:"dsbdsj"}
-  const finalArr = [obj].concat(newArr)
-  setstate({...state,array:finalArr})
-}
-
+  const handleAdd = () => {
+    let newArr = state.array;
+    let obj: any = { name: "dsbdsj" };
+    const finalArr = [obj].concat(newArr);
+    setstate({ ...state, array: finalArr });
+  };
 
   return (
     <>
@@ -67,7 +72,7 @@ const handleAdd = () => {
           <Button key="3">Operation</Button>,
           <Button key="2">Operation</Button>,
           <Button key="1" type="primary">
-            Primary 
+            Primary
           </Button>,
         ]}
       >
@@ -95,12 +100,22 @@ const handleAdd = () => {
         <StyledButton onClick={handleDecrement}>Decrement</StyledButton>
         <Input onChange={handleChange} type="number" />
         <StyledButton onClick={handleSetValue}>Set Value</StyledButton>
-        {state.array.map(function(cell:any, i:number) {
-          if(i===0){
-            return <Button key={i} onClick={handleAdd}>{cell.name}</Button>    
-          }
-          else if(i > 0) {
-            return <><Button key={i} onClick={handleAdd}>{cell.name}</Button><Button>second</Button></>
+        {state.array.map(function (cell: any, i: number) {
+          if (i === 0) {
+            return (
+              <Button key={i} onClick={handleAdd}>
+                {cell.name}
+              </Button>
+            );
+          } else if (i > 0) {
+            return (
+              <>
+                <Button key={i} onClick={handleAdd}>
+                  {cell.name}
+                </Button>
+                <Button>second</Button>
+              </>
+            );
           }
         })}
       </Space>
