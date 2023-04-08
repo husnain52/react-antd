@@ -1,9 +1,14 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
+const userRoute = require("./users");
+const pjson = require("../package.json");
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+module.exports = () => {
+  router.get("/", function (req, res, next) {
+    res.send(`api-version: ${pjson.version}`);
+  });
 
-module.exports = router;
+  router.use("/users", userRoute);
+
+  return router;
+};
