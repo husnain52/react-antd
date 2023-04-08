@@ -1,15 +1,14 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import Home from "../views/home/Home";
-import Users from "../views/users/Users";
-import Contact from "../views/contact/Contact";
+import Home from "../views/HomePage/Home";
+import Users from "../views/Users/Users";
+import Contact from "../views/Contact/Contact";
 import Sidebar from "../components/Sidebar";
-import Login from "../views/noauth/Login";
+import Login from "views/Login";
 import ProtectedRoute from "./ProtectedRoute";
-import Signup from "../views/noauth/Signup";
+import Signup from "views/Signup";
 import { BrowserRouter as Router } from "react-router-dom";
-import Favorites from "../views/favorites/Favorites";
-import NOTFOUND from "./NOTFOUND";
+import Favorites from "../views/Favorites/Favorites";
 
 export default function Routes() {
   return (

@@ -1,12 +1,11 @@
-import React from 'react';
-import { Table, Space, Tag, Button, Typography, Divider, Image, Pagination } from "antd";
+import React from "react";
+import { Table, Tag, Button, Typography, Image } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux-toolkit/store";
 import useDocumentTitle from "../../common/documentTitle";
 import styled from "styled-components";
 import Avatar from "antd/lib/avatar/avatar";
-import { StarOutlined,StarFilled } from "@ant-design/icons";
-
+import { StarOutlined, StarFilled } from "@ant-design/icons";
 
 const { Title } = Typography;
 const StyledButton = styled(Button)``;
@@ -20,7 +19,7 @@ export default function About() {
 
   const dispatch = useDispatch();
 
-  const userdata = useSelector((state: RootState) => state.tableData);
+  const userdata: any = useSelector((state: RootState) => state.tableData);
 
   const array: any[] = userdata.data ? userdata.data.results : [];
 
@@ -30,35 +29,32 @@ export default function About() {
     age: value.dob.age,
     address: `Street #${value.location.street.number}, ${value.location.street.name}, ${value.location.country}`,
     tags: ["random", "user"],
-    img: value.picture.large
+    img: value.picture.large,
   }));
 
-  const [favorite, setfavorite] = React.useState<string>('');
+  const [favorite, setfavorite] = React.useState<string>("");
   const handleFav = (record: any) => {
-    const favorites:any = localStorage.getItem('favorites');
-    setfavorite(record.name)
-    if(favorites) {
+    const favorites: any = localStorage.getItem("favorites");
+    setfavorite(record.name);
+    if (favorites) {
       const favArray = JSON.parse(favorites);
       favArray.push(record);
-      console.log(favArray)
-      localStorage.setItem('favorites',JSON.stringify(favArray));
+      console.log(favArray);
+      localStorage.setItem("favorites", JSON.stringify(favArray));
     } else {
       const array = [record];
-      localStorage.setItem('favorites',JSON.stringify(array));
+      localStorage.setItem("favorites", JSON.stringify(array));
     }
   };
-  
-  
+
   const columns = [
     {
       title: "Img",
       dataIndex: "img",
       key: "img",
-      render: (img:string) => {
-        return (
-          <Avatar src={<Image src={img} />} alt="img" />
-        )
-      }
+      render: (img: string) => {
+        return <Avatar src={<Image src={img} />} alt="img" />;
+      },
     },
     {
       title: "Name",
@@ -79,17 +75,17 @@ export default function About() {
       title: "Tags",
       key: "tags",
       dataIndex: "tags",
-      render: (tags:any) => (
+      render: (tags: any) => (
         <>
-          {tags.map((tag:any) => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
+          {tags.map((tag: any) => {
+            let color = tag.length > 5 ? "geekblue" : "green";
+            if (tag === "loser") {
+              color = "volcano";
             }
             return (
-                <Tag color={color} key={tag}>
-                  {tag.toUpperCase()}
-                </Tag>
+              <Tag color={color} key={tag}>
+                {tag.toUpperCase()}
+              </Tag>
             );
           })}
         </>
@@ -99,7 +95,12 @@ export default function About() {
       title: "Action",
       key: "action",
       render: (record: any) => (
-        <Button icon={favorite === record.name ? <StarFilled /> : <StarOutlined />} onClick={()=>handleFav(record)}>{favorite=== record.name ? 'Added' : 'Favorite'}</Button>
+        <Button
+          icon={favorite === record.name ? <StarFilled /> : <StarOutlined />}
+          onClick={() => handleFav(record)}
+        >
+          {favorite === record.name ? "Added" : "Favorite"}
+        </Button>
       ),
     },
   ];
@@ -119,7 +120,7 @@ export default function About() {
         dataSource={data}
         columns={columns}
         loading={userdata.loader}
-        pagination={{pageSize:4}}
+        pagination={{ pageSize: 4 }}
       />
     </>
   );

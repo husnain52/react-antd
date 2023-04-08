@@ -2,7 +2,7 @@ import React from "react";
 import { Form, Input, Button, Select } from "antd";
 import Modal from "antd/lib/modal/Modal";
 import useDocumentTitle from "../../common/documentTitle";
-import Spinner from "../../components/Spinner";
+import Spinner from "components/Spinner/Spinner";
 const { Option } = Select;
 
 const formItemLayout = {
