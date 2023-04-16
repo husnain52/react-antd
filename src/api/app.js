@@ -3,6 +3,18 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const mongoose = require("mongoose");
+require("dotenv").config();
+
+const uri = process.env.ATLAS_URI;
+
+mongoose.connect(uri, { autoIndex: true });
+
+const connection = mongoose.connection;
+
+connection.once("open", () => {
+  console.log("MonoDB connection established successfully");
+});
 
 const indexRouter = require("./routes/index");
 

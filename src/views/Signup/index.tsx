@@ -13,7 +13,7 @@ import {
 import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
-import { userData } from "../Login/slice";
+import { addNewUser } from "../Login/slice";
 import useDocumentTitle from "../../common/documentTitle";
 import Spinner from "components/Spinner/Spinner";
 import {
@@ -28,30 +28,34 @@ import { Link } from "react-router-dom";
 
 const { Option } = Select;
 
+const prefixSelector = (
+  <Form.Item name="prefix" noStyle>
+    <Select
+      defaultValue="+92"
+      style={{
+        width: 70,
+      }}
+    >
+      <Option value="+92">+92</Option>
+      <Option value="+1">+1</Option>
+    </Select>
+  </Form.Item>
+);
+
 export default function Signup() {
-  useDocumentTitle("Signup for an Account");
+  // Hooks
+  const [form] = Form.useForm();
   const dispatch = useDispatch();
   const history = useHistory();
-  const [form] = Form.useForm();
-  const prefixSelector = (
-    <Form.Item name="prefix" noStyle>
-      <Select
-        defaultValue="+92"
-        style={{
-          width: 70,
-        }}
-      >
-        <Option value="+92">+92</Option>
-        <Option value="+1">+1</Option>
-      </Select>
-    </Form.Item>
-  );
+
+  // update document title
+  useDocumentTitle("Signup for an Account");
 
   const onFinish = (values: any) => {
-    message.success("User enrolled successfully!");
-    dispatch(userData(values));
-    localStorage.setItem("users", JSON.stringify(values));
-    history.push("/login");
+    console.log(values);
+    dispatch(addNewUser(values));
+    // localStorage.setItem("users", JSON.stringify(values));
+    // history.push("/login");
   };
   const namePattern = /^\s*([A-Za-z]{1,}([\.,] |[-']| ))+[A-Za-z]+\.?\s*$/;
   const phoneRegEx =
