@@ -8,6 +8,9 @@ require("dotenv").config();
 
 const uri = process.env.ATLAS_URI;
 
+
+console.log(uri, "uri")
+
 mongoose.connect(uri, { autoIndex: true });
 
 const connection = mongoose.connection;

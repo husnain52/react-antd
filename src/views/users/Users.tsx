@@ -6,6 +6,9 @@ import useDocumentTitle from "../../common/documentTitle";
 import styled from "styled-components";
 import Avatar from "antd/lib/avatar/avatar";
 import { StarOutlined, StarFilled } from "@ant-design/icons";
+import { useInjectSaga, useInjectReducer } from "redux-injectors";
+import reducer from "./slice";
+import saga from "./saga";
 
 const { Title } = Typography;
 const StyledButton = styled(Button)``;
@@ -16,10 +19,12 @@ const StyledDiv = styled.div`
 
 export default function About() {
   useDocumentTitle("About Page");
+  useInjectReducer({ key: "users", reducer });
+  useInjectSaga({ key: "users", saga });
 
   const dispatch = useDispatch();
 
-  const userdata: any = useSelector((state: RootState) => state.tableData);
+  const userdata: any = useSelector((state: RootState) => []);
 
   const array: any[] = userdata.data ? userdata.data.results : [];
 

@@ -18,7 +18,7 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
-import { userData } from "views/Login/slice";
+import { addNewUser } from "views/Login/slice";
 const { Option } = Select;
 
 function getBase64(file: any) {
@@ -81,7 +81,7 @@ export default function EditDetails() {
     </Form.Item>
   );
   const onFinish = (values: any) => {
-    dispatch(userData(values));
+    dispatch(addNewUser(values));
     if (state.url) {
       console.log(state.url);
       localStorage.setItem("userImageUrl", state.url);

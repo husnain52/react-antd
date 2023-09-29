@@ -12,6 +12,8 @@ import { RootState } from "../../redux-toolkit/store";
 import { useSelector, useDispatch } from "react-redux";
 import { decrement, increment, incrementByAmount } from "./slice";
 import useDocumentTitle from "../../common/documentTitle";
+import { useInjectReducer } from "redux-injectors";
+import reducer from "./slice";
 
 interface IStateProps {
   number: number;
@@ -31,7 +33,8 @@ const StyledButton = styled(Button)`
   }
 `;
 
-export default function Home() {
+const Home = () => {
+  useInjectReducer({ key: "home", reducer });
   useDocumentTitle("Home Page 👻");
   const dispatch = useDispatch();
   const [state, setstate] = React.useState<IStateProps>({
@@ -39,7 +42,7 @@ export default function Home() {
     array: [{ name: "Add" }],
   });
 
-  const count = useSelector((state: RootState) => state.counter.value);
+  const count = useSelector((state: RootState) => 1);
 
   function handleIncrement() {
     dispatch(increment());
@@ -121,4 +124,6 @@ export default function Home() {
       </Space>
     </>
   );
-}
+};
+
+export default Home;

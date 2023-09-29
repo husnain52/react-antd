@@ -1,25 +1,38 @@
-import { configureStore } from "@reduxjs/toolkit";
-import counterReducer from "../views/HomePage/slice";
-import userData from "../views/Login/slice";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
-import rootSaga from "../views/Users/saga";
-import data from "views/Login/slice";
+import { createInjectorsEnhancer } from "redux-injectors";
 
+function createReducer(injectedReducers = {}) {
+  const rootReducer = combineReducers({
+    ...injectedReducers,
+    // other non-injected reducers can go here...
+  });
+
+  return rootReducer;
+}
+
+const initialState: {} | any = {};
 // create the saga middleware
 let sagaMiddleware = createSagaMiddleware();
 
-export const store = configureStore({
-  reducer: {
-    counter: counterReducer,
-    data: userData,
-    tableData: data,
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(sagaMiddleware),
-});
+const { run: runSaga } = sagaMiddleware;
 
-// then run the saga
-sagaMiddleware.run(rootSaga);
+// for injectors
+const enhancers = [
+  createInjectorsEnhancer({
+    createReducer,
+    runSaga,
+  }),
+];
+
+export const store = configureStore({
+  reducer: createReducer(),
+  preloadedState: initialState,
+  middleware: (getDefaultMiddleware) => {
+    return [...getDefaultMiddleware(), sagaMiddleware];
+  },
+  enhancers,
+});
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;

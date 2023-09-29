@@ -13,8 +13,13 @@ import {
   StyledTitle,
 } from "./components/styles";
 import { StyledForm } from "components/Form";
+import { useInjectReducer, useInjectSaga } from "redux-injectors";
+import loginLeducer from "./slice";
+import saga from "./saga";
 
-export default function Login() {
+const Login = () => {
+  useInjectReducer({ key: "login", reducer: loginLeducer });
+  useInjectSaga({ key: "login", saga });
   useDocumentTitle("Login");
   const history = useHistory();
   const data: any = JSON.parse(localStorage.getItem("users") || "{}");
@@ -116,4 +121,6 @@ export default function Login() {
       </Spinner>
     </>
   );
-}
+};
+
+export default Login;

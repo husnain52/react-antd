@@ -1,15 +1,4 @@
-import React from "react";
-import {
-  Form,
-  Input,
-  Button,
-  Select,
-  Row,
-  Col,
-  Typography,
-  message,
-  Space,
-} from "antd";
+import { Form, Input, Button, Select, Row, Col, Typography, Space } from "antd";
 import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
@@ -25,6 +14,9 @@ import {
 import SignUpImg from "assets/images/signup.png";
 import { StyledForm } from "components/Form";
 import { Link } from "react-router-dom";
+import { useInjectReducer, useInjectSaga } from "redux-injectors";
+import reducer from "../Login/slice";
+import saga from "../Login/saga";
 
 const { Option } = Select;
 
@@ -43,6 +35,8 @@ const prefixSelector = (
 );
 
 export default function Signup() {
+  useInjectReducer({ key: "signup", reducer });
+  useInjectSaga({ key: "signup", saga });
   // Hooks
   const [form] = Form.useForm();
   const dispatch = useDispatch();
@@ -52,7 +46,6 @@ export default function Signup() {
   useDocumentTitle("Signup for an Account");
 
   const onFinish = (values: any) => {
-    console.log(values);
     dispatch(addNewUser(values));
     // localStorage.setItem("users", JSON.stringify(values));
     // history.push("/login");
